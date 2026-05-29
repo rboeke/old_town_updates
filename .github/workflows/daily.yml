@@ -31,7 +31,7 @@ jobs:
         env:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
-        run: python scraper.py
+        run: python update_seen_classes.py
 
       - name: Commit updated seen_classes.json
         run: |
