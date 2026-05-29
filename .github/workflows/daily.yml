@@ -2,11 +2,14 @@ name: Daily Class Updates
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  
+
 on:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 7 * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   scrape:
@@ -28,4 +31,15 @@ jobs:
         env:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
-        run: python update_seen_classes.py
+        run: python scraper.py
+
+      - name: Commit updated seen_classes.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add seen_classes.json
+
+          git diff --cached --quiet || git commit -m "Update seen classes"
+
+          git push
